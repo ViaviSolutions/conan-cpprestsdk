@@ -10,7 +10,7 @@ class HelloConan(ConanFile):
     exports = 'CMakeLists.txt'
     generators = "cmake"
     requires = ('Boost/1.60.0@lasote/stable',
-                'OpenSSL/1.0.2d@lasote/stable')
+                'OpenSSL/1.0.2g@lasote/stable')
 
     def source(self):
         zip_name = 'cpprestsdk-2.8.0.zip'
