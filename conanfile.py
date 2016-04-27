@@ -3,7 +3,7 @@ from conans.tools import download, unzip
 import os
 import shutil
 
-class HelloConan(ConanFile):
+class CppRestSdkConan(ConanFile):
     name = 'CppRestSdk'
     version = '2.8.0'
     settings = 'os', 'compiler', 'build_type', 'arch'
