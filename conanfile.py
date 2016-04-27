@@ -12,6 +12,9 @@ class CppRestSdkConan(ConanFile):
     requires = ('Boost/1.60.0@lasote/stable',
                 'OpenSSL/1.0.2g@lasote/stable')
 
+    def config(self):
+        self.options["OpenSSL"].shared = True
+
     def source(self):
         zip_name = 'cpprestsdk-2.8.0.zip'
         download('https://github.com/Microsoft/cpprestsdk/archive/v2.8.0.zip', zip_name)
