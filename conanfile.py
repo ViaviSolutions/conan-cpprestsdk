@@ -16,12 +16,15 @@ class CppRestSdkConan(ConanFile):
         self.options["OpenSSL"].shared = True
 
     def source(self):
-        zip_name = 'cpprestsdk-2.8.0.zip'
-        download('https://github.com/Microsoft/cpprestsdk/archive/v2.8.0.zip', zip_name)
+        zip_name = 'cpprestsdk-{}.zip'.format(self.version)
+        url = 'https://github.com/Microsoft/cpprestsdk/archive/v{}.zip'.format(self.version)
+        download(url, zip_name)
         unzip(zip_name)
-        shutil.move('cpprestsdk-2.8.0', 'cpprestsdk')
+        shutil.move('cpprestsdk-{}'.format(self.version), 'cpprestsdk')
         os.unlink(zip_name)
-        shutil.move('cpprestsdk/Release/CMakeLists.txt', 'cpprestsdk/Release/CMakeListsOriginal.cmake')
+        shutil.move(
+            'cpprestsdk/Release/CMakeLists.txt',
+            'cpprestsdk/Release/CMakeListsOriginal.cmake')
         shutil.move('CMakeLists.txt', 'cpprestsdk/Release/CMakeLists.txt')
 
     def build(self):
@@ -34,12 +37,14 @@ class CppRestSdkConan(ConanFile):
         self.copy("*.h", dst="include", src="cpprestsdk/Release/include/cpprest")
         self.copy("*.h", dst="include", src="cpprestsdk/Release/include/pplx")
         self.copy("*.h", dst="include", src="cpprestsdk/Release/include/cpprest/details")
-        libraries = ['libcommon_utilities.so',
+        libraries = [
+            'libcommon_utilities.so',
             'libcpprest.so',
             'libcpprest.so.2.8',
             'libhttptest_utilities.so',
             'libunittestpp.so',
-            'libwebsockettest_utilities.so']
+            'libwebsockettest_utilities.so'
+            ]
         for lib in libraries:
             self.copy(lib, dst="lib", src="cpprestsdk/Release/Binaries/")
 
