@@ -34,9 +34,9 @@ class CppRestSdkConan(ConanFile):
         self.run('cd cpprestsdk/Release && cmake --build . %s' % cmake.build_config)
 
     def package(self):
-        self.copy("*.h", dst="include", src="cpprestsdk/Release/include/cpprest")
-        self.copy("*.h", dst="include", src="cpprestsdk/Release/include/pplx")
-        self.copy("*.h", dst="include", src="cpprestsdk/Release/include/cpprest/details")
+        self.copy("*", dst="include/cpprest", src="cpprestsdk/Release/include/cpprest", keep_path=False)
+        self.copy("*", dst="include/cpprest/details", src="cpprestsdk/Release/include/cpprest/details", keep_path=False)
+        self.copy("*", dst="include/pplx", src="cpprestsdk/Release/include/pplx", keep_path=False)
         libraries = [
             'libcommon_utilities.so',
             'libcpprest.so',
@@ -49,5 +49,5 @@ class CppRestSdkConan(ConanFile):
             self.copy(lib, dst="lib", src="cpprestsdk/Release/Binaries/")
 
     def package_info(self):
-        pass
-        #self.cpp_info.libs = ["hello"]
+        self.cpp_info.cppflags = ["-std=c++11"]
+        self.cpp_info.libs = ["libcpprest.so"]
