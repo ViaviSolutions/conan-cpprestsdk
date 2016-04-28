@@ -34,9 +34,18 @@ class CppRestSdkConan(ConanFile):
         shutil.move('CMakeLists.txt', 'cpprestsdk/Release/CMakeLists.txt')
 
     def build(self):
+        if self.settings.os == "Linux":
+            num_cores = 0
+            with open('/proc/cpuinfo') as cpuinfo:
+                for line in cpuinfo:
+                    if line.startswith('processor'):
+                        num_cores += 1
+        else:
+            num_cores = 1
         cmake = CMake(self.settings)
-        self.run('cd cpprestsdk/Release && cmake . %s' % cmake.command_line)
-        self.run('cd cpprestsdk/Release && cmake --build . %s' % cmake.build_config)
+        cmake_options = '-DBUILD_TESTS=OFF -DBUILD_SAMPLES=OFF'
+        self.run('cd cpprestsdk/Release && cmake . %s %s' % (cmake.command_line, cmake_options))
+        self.run('cd cpprestsdk/Release && cmake --build . %s -- -j %d' % (cmake.build_config, num_cores))
 
     def package(self):
         self.copy("*", dst="include/cpprest", src="cpprestsdk/Release/include/cpprest", keep_path=False)
