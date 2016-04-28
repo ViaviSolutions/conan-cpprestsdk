@@ -8,14 +8,17 @@ class CppRestSdkConan(ConanFile):
     version = '2.8.0'
     license = 'Apache License 2.0'
     settings = 'os', 'compiler', 'build_type', 'arch'
+    options = {"shared": [True, False]}
+    default_options = "shared=True"
     exports = 'CMakeLists.txt'
     generators = "cmake"
     requires = ('Boost/1.59.0@lasote/stable',
                 'OpenSSL/1.0.2g@viavisolutions/testing')
 
     def config(self):
-        self.options["OpenSSL"].shared = True
-        self.options["OpenSSL"].zlib_dynamic = True
+        self.options["Boost"].shared = self.options.shared
+        self.options["OpenSSL"].shared = self.options.shared
+        self.options["OpenSSL"].zlib_dynamic = self.options.shared
         self.options["OpenSSL"].no_electric_fence = True
 
     def source(self):
