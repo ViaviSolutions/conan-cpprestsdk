@@ -4,7 +4,7 @@ import os
 import shutil
 
 class CppRestSdkConan(ConanFile):
-    name = 'CppRestSdk'
+    name = "CppRestSdk"
     version = '2.8.0'
     license = 'Apache License 2.0'
     settings = 'os', 'compiler', 'build_type', 'arch'
