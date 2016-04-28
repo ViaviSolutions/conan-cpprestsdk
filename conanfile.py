@@ -13,7 +13,7 @@ class CppRestSdkConan(ConanFile):
     exports = 'CMakeLists.txt'
     generators = "cmake"
     requires = ('Boost/1.59.0@lasote/stable',
-                'OpenSSL/1.0.2g@viavisolutions/testing')
+                'OpenSSL/1.0.2g@ViaviSolutions/stable')
 
     def config(self):
         self.options["Boost"].shared = self.options.shared
