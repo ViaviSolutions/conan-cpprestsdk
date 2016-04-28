@@ -1,49 +1,56 @@
+#include <cstdio>
+#include <cstdlib>
+#include <string>
+#include <iostream>
 #include <cpprest/http_client.h>
-#include <cpprest/filestream.h>
+#include <cpprest/http_listener.h>
+
+
+
+void handle_get(web::http::http_request request)
+{
+    ucout << request.to_string() << std::endl;
+    request.reply(web::http::status_codes::OK);
+}
 
 
 
 int main(int argc, char* argv[])
 {
-    auto fileStream = std::make_shared<concurrency::streams::ostream>();
+    utility::string_t port = std::to_string(rand() % 10000 + 50000);
+    utility::string_t address = U("http://localhost:");
+    address.append(port);
 
-    // Open stream to output file.
-    pplx::task<void> requestTask = concurrency::streams::fstream::open_ostream(
-        U("results.html")).then([=](concurrency::streams::ostream outFile)
-    {
-        *fileStream = outFile;
+    web::http::experimental::listener::http_listener listener(address);
+    try {
+        listener.open().wait();
+    } catch (const std::exception &e) {
+        printf("Error exception:%s\n", e.what());
+        return 0;
+    }
+    listener.support(web::http::methods::GET, handle_get);
 
-        // Create http_client to send the request.
-        web::http::client::http_client client(U("http://www.bing.com/"));
+    // Create http_client to send the request.
+    web::http::client::http_client client(address);
 
-        // Build request URI and start the request.
-        web::http::uri_builder builder(U("/search"));
-        builder.append_query(U("q"), U("Casablanca CodePlex"));
-        return client.request(web::http::methods::GET, builder.to_string());
-    })
+    // Build request URI and start the request.
+    web::http::uri_builder builder(U("/"));
+    builder.append_query(U("q"), U("Casablanca Test"));
+    pplx::task<web::http::http_response> requestTask = client.request(
+        web::http::methods::GET,
+        builder.to_string());
 
     // Handle response headers arriving.
-    .then([=](web::http::http_response response)
+    requestTask.then([=](web::http::http_response response)
     {
         printf("Received response status code:%u\n", response.status_code());
-
-        // Write response body into the file.
-        return response.body().read_to_end(fileStream->streambuf());
-    })
-
-    // Close the file stream.
-    .then([=](size_t)
-    {
-        return fileStream->close();
     });
 
     // Wait for all the outstanding I/O to complete and handle any exceptions
-    try
-    {
+    try {
         requestTask.wait();
-    }
-    catch (const std::exception &e)
-    {
+        listener.close().wait();
+    } catch (const std::exception &e) {
         printf("Error exception:%s\n", e.what());
     }
 
