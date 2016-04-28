@@ -15,6 +15,7 @@ class CppRestSdkConan(ConanFile):
 
     def config(self):
         self.options["OpenSSL"].shared = True
+        self.options["OpenSSL"].zlib_dynamic = True
 
     def source(self):
         zip_name = 'cpprestsdk-{}.zip'.format(self.version)
