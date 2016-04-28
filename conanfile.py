@@ -10,8 +10,8 @@ class CppRestSdkConan(ConanFile):
     settings = 'os', 'compiler', 'build_type', 'arch'
     exports = 'CMakeLists.txt'
     generators = "cmake"
-    requires = ('Boost/1.60.0@lasote/stable',
-                'OpenSSL/1.0.2g@lasote/stable')
+    requires = ('Boost/1.59.0@lasote/stable',
+                'OpenSSL/1.0.2g@viavisolutions/testing')
 
     def config(self):
         self.options["OpenSSL"].shared = True
