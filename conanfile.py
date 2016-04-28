@@ -36,7 +36,6 @@ class CppRestSdkConan(ConanFile):
     def build(self):
         cmake = CMake(self.settings)
         self.run('cd cpprestsdk/Release && cmake . %s' % cmake.command_line)
-        self.run('printenv')
         self.run('cd cpprestsdk/Release && cmake --build . %s' % cmake.build_config)
 
     def package(self):
