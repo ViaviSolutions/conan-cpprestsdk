@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ViaviSolutions/conan-cpprestsdk.svg?branch=master)](https://travis-ci.org/ViaviSolutions/conan-cpprestsdk)
+
 # conan-cpprestsdk
 
 [Conan.io](https://conan.io) package for Microsoft's [C++ REST SDK](https://github.com/Microsoft/cpprestsdk)
