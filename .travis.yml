@@ -6,7 +6,7 @@ language: python
 env:
   global:
     - CONAN_UPLOAD=1
-    - CONAN_REFERENCE="OpenSSL/1.0.2g"
+    - CONAN_REFERENCE="CppRestSdk/2.8.0"
     - CONAN_USERNAME="ViaviSolutions"
     - CONAN_CHANNEL="ci"
     - CONAN_TOTAL_PAGES=4
