@@ -44,6 +44,10 @@ class CppRestSdkConan(ConanFile):
             num_cores = 1
         cmake = CMake(self.settings)
         cmake_options = '-DBUILD_TESTS=OFF -DBUILD_SAMPLES=OFF'
+        if self.options.shared:
+            cmake_options += ' -DBUILD_SHARED_LIBS=ON'
+        else:
+            cmake_options += ' -DBUILD_SHARED_LIBS=OFF'
         self.run('cd cpprestsdk/Release && cmake . %s %s' % (cmake.command_line, cmake_options))
         self.run('cd cpprestsdk/Release && cmake --build . %s -- -j %d' % (cmake.build_config, num_cores))
 
@@ -51,13 +55,19 @@ class CppRestSdkConan(ConanFile):
         self.copy("*", dst="include/cpprest", src="cpprestsdk/Release/include/cpprest", keep_path=False)
         self.copy("*", dst="include/cpprest/details", src="cpprestsdk/Release/include/cpprest/details", keep_path=False)
         self.copy("*", dst="include/pplx", src="cpprestsdk/Release/include/pplx", keep_path=False)
-        libraries = [
-            'libcpprest.so',
-            'libcpprest.so.2.8',
-            ]
-        for lib in libraries:
-            self.copy(lib, dst="lib", src="cpprestsdk/Release/Binaries/")
+        if self.options.shared:
+            libraries = [
+                'libcpprest.so',
+                'libcpprest.so.2.8',
+                ]
+            for lib in libraries:
+                self.copy(lib, dst="lib", src="cpprestsdk/Release/Binaries/")
+        else:
+            self.copy('libcpprest.a', dst="lib", src="cpprestsdk/Release/lib/")
 
     def package_info(self):
         self.cpp_info.cppflags = ["-std=c++11"]
-        self.cpp_info.libs = ["libcpprest.so"]
+        if self.options.shared:
+            self.cpp_info.libs = ["cpprest", "boost_system", "ssl", "crypto"]
+        else:
+            self.cpp_info.libs = ["cpprest", "boost_system", "boost_thread", "ssl", "crypto", "pthread", "dl"]
