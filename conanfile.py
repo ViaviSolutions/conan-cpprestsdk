@@ -52,12 +52,8 @@ class CppRestSdkConan(ConanFile):
         self.copy("*", dst="include/cpprest/details", src="cpprestsdk/Release/include/cpprest/details", keep_path=False)
         self.copy("*", dst="include/pplx", src="cpprestsdk/Release/include/pplx", keep_path=False)
         libraries = [
-            'libcommon_utilities.so',
             'libcpprest.so',
             'libcpprest.so.2.8',
-            'libhttptest_utilities.so',
-            'libunittestpp.so',
-            'libwebsockettest_utilities.so'
             ]
         for lib in libraries:
             self.copy(lib, dst="lib", src="cpprestsdk/Release/Binaries/")
