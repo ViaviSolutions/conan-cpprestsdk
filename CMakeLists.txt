@@ -1,5 +1,7 @@
 PROJECT(conancpprestsdk)
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=conversion")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-error=conversion")
 include(${CMAKE_CURRENT_SOURCE_DIR}/../../conanbuildinfo.cmake)
 CONAN_BASIC_SETUP()
 include("CMakeListsOriginal.cmake")
